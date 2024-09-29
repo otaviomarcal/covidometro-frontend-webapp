@@ -1,4 +1,5 @@
 import { ref } from 'vue';
+import { countrySearchTranslate, invertTranslationList } from '@/utils/CountryUtils';
 
 interface CovidReport {
   date: string;
@@ -13,27 +14,6 @@ interface CovidReport {
     province: string;
   };
 }
-
-const countrySearchTranslate: Record<string, string> = {
-  "South Africa": "África do Sul",
-  "Australia": "Austrália",
-  "Brazil": "Brasil",
-  "US": "Estados Unidos",
-  "India": "Índia",
-  "Japan": "Japão",
-  "New Zealand": "Nova Zelândia",
-  "Germany": "Alemanha",
-  "Italy": "Itália",
-  "France": "França",
-  "Spain": "Espanha",
-  "United Kingdom": "Reino Unido",
-  "Canada": "Canadá",
-  "Greenland": "Groenlândia",
-};
-
-const reverseCountrySearchTranslate: Record<string, string> = Object.fromEntries(
-  Object.entries(countrySearchTranslate).map(([english, portuguese]) => [portuguese.toLowerCase(), english])
-);
 
 export function useCovidApi() {
   const covidData = ref<CovidReport[]>([]);
@@ -75,7 +55,7 @@ export function useCovidApi() {
     loading.value = true;
 
     const countryNameLowerCase = countryName.toLowerCase();
-    const translatedCountryName = reverseCountrySearchTranslate[countryNameLowerCase] || countryName;
+    const translatedCountryName = invertTranslationList[countryNameLowerCase] || countryName;
 
     try {
       const response = await fetch(`https://covid-api.com/api/reports?region_name=${translatedCountryName}`);

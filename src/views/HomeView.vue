@@ -2,49 +2,10 @@
 import { ref, onMounted } from 'vue'
 import { useCovidApi } from '@/composables/useCovidApi'
 import LoadingComponent from '@/components/LoadingComponent.vue'
+import { getCountryInEnglish } from '@/utils/CountryUtils'
 
 const { fetchDataList, fetchDataByCountry, covidData, loading, error } = useCovidApi()
-
 const searchCountry = ref('')
-
-const countrySearchTranslate: Record<string, string> = {
-  'África do Sul': 'South Africa',
-  'África do norte': 'North Africa',
-  Austrália: 'Australia',
-  Brasil: 'Brazil',
-  'Estados Unidos': 'US',
-  China: 'China',
-  Índia: 'India',
-  Japão: 'Japan',
-  'Nova Zelândia': 'New Zealand',
-  Alemanha: 'Germany',
-  Itália: 'Italy',
-  França: 'France',
-  Espanha: 'Spain',
-  'Reino Unido': 'United Kingdom',
-  Canadá: 'Canada',
-  Groenlândia: 'Greenland',
-  Rússia: 'Russia',
-  'Coreia do Sul': 'South Korea',
-  'Coreia do Norte': 'North Korea',
-  'Arábia Saudita': 'Saudi Arabia',
-  'Emirados Árabes Unidos': 'United Arab Emirates'
-}
-
-const normalizeText = (text: string): string => {
-  return text
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase()
-}
-
-const getCountryInEnglish = (input: string): string => {
-  const normalizedInput = normalizeText(input)
-  const country = Object.keys(countrySearchTranslate).find(
-    (country) => normalizeText(country) === normalizedInput
-  )
-  return country ? countrySearchTranslate[country] : input
-}
 
 onMounted(() => {
   fetchDataList(['ZAF', 'AUS', 'BRA', 'USA', 'CHN'])
@@ -52,10 +13,8 @@ onMounted(() => {
 
 const handleSearch = () => {
   covidData.value = []
-
   if (searchCountry.value) {
     const countryToSearch = getCountryInEnglish(searchCountry.value)
-
     fetchDataByCountry(countryToSearch)
   } else {
     fetchDataList(['ZAF', 'AUS', 'BRA', 'USA', 'CHN'])
@@ -90,7 +49,6 @@ const handleSearch = () => {
               placeholder="Digite o nome do país"
               v-model="searchCountry"
               @keyup.enter="handleSearch"
-              @blur="handleSearch"
             />
             <span class="icon is-left">
               <i class="icon-search" />
