@@ -19,7 +19,10 @@ export const countrySearchTranslate: Record<string, string> = {
   "South Korea": "Coreia do Sul",
   "North Korea": "Coreia do Norte",
   "Saudi Arabia": "Arábia Saudita",
-  "United Arab Emirates": "Emirados Árabes Unidos"
+  "United Arab Emirates": "Emirados Árabes",
+  "United Arab Emirates ": "Emirados Árabes Unidos",
+  "Turkey": "Turquia",
+  "Iran": "Irã",
 };
 
 export const normalizeText = (text: string): string => {

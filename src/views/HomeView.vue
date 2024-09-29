@@ -1,11 +1,23 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useCovidApi } from '@/composables/useCovidApi'
 import LoadingComponent from '@/components/LoadingComponent.vue'
 import { getCountryInEnglish } from '@/utils/CountryUtils'
 
 const { fetchDataList, fetchDataByCountry, covidData, loading, error } = useCovidApi()
 const searchCountry = ref('')
+const sortOrder = ref('alphabetical')
+
+const sortedCovidData = computed(() => {
+  if (sortOrder.value === 'alphabetical') {
+    return [...covidData.value].sort((a, b) => a.region.name.localeCompare(b.region.name))
+  } else if (sortOrder.value === 'deaths-asc') {
+    return [...covidData.value].sort((a, b) => a.deaths - b.deaths)
+  } else if (sortOrder.value === 'deaths-desc') {
+    return [...covidData.value].sort((a, b) => b.deaths - a.deaths)
+  }
+  return covidData.value
+})
 
 onMounted(() => {
   fetchDataList(['ZAF', 'AUS', 'BRA', 'USA', 'CHN'])
@@ -57,6 +69,16 @@ const handleSearch = () => {
         </div>
       </div>
 
+      <div v-if="sortedCovidData.length > 1" class="filters">
+        <label for="sort-order">Ordenar:</label>
+        <select id="sort-order" v-model="sortOrder">
+          <option value="alphabetical">Ordem Alfabética</option>
+
+          <option value="deaths-asc">Menor ⬇️ de mortes</option>
+          <option value="deaths-desc">Maior ⬆️ de mortes</option>
+        </select>
+      </div>
+
       <div class="loading" v-if="loading">
         <p>Carregando</p>
         <loading-component color="#EF6160" />
@@ -64,8 +86,8 @@ const handleSearch = () => {
 
       <div v-if="error" class="error">{{ error }}</div>
 
-      <ul v-if="covidData.length > 0" class="country-list">
-        <li v-for="(report, index) in covidData" :key="index" class="box country-card">
+      <ul v-if="sortedCovidData.length > 0" class="country-list">
+        <li v-for="(report, index) in sortedCovidData" :key="index" class="box country-card">
           <h3>{{ report.region.name }}</h3>
           <div class="stats-data">
             <div>
@@ -78,7 +100,7 @@ const handleSearch = () => {
             </div>
             <div>
               <p class="total">Fatalidade</p>
-              <p class="value">{{ report.fatality_rate }}%</p>
+              <p class="value">{{ (report.fatality_rate * 100).toFixed(2) }}%</p>
             </div>
           </div>
         </li>
@@ -114,6 +136,9 @@ const handleSearch = () => {
         line-height: 1em;
         @media (max-width: 768px) {
           font-size: 4rem;
+        }
+        @media (max-width: 376px) {
+          font-size: 2.5rem;
         }
       }
       p.subtitle {
@@ -190,6 +215,26 @@ const handleSearch = () => {
     }
   }
 
+  .filters {
+    max-width: 645px;
+    margin: auto;
+    margin-top: 20px;
+    text-align: right;
+    font-size: 0.8em;
+    label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      font-family: $font-family-spectral;
+      color: $color-text;
+      margin-right: 10px;
+    }
+    select {
+      padding: 5px;
+      border-radius: 3px;
+      border: 1px solid $color-border;
+    }
+  }
+
   .loading {
     text-align: center;
     margin-top: 40px;
@@ -221,10 +266,16 @@ const handleSearch = () => {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         gap: 20px;
+        @media (max-width: 440px) {
+          grid-template-columns: 1fr;
+        }
 
         div {
           text-align: center;
           border-left: 1px solid #e7e7e7;
+          @media (max-width: 440px) {
+            border-left: none;
+          }
           &:first-child {
             border-left: none;
           }
