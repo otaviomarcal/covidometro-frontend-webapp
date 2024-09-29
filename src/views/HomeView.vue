@@ -2,6 +2,8 @@
 import { ref, onMounted, computed } from 'vue'
 import { useCovidApi } from '@/composables/useCovidApi'
 import LoadingComponent from '@/components/LoadingComponent.vue'
+import SearchComponent from '@/components/SearchComponent.vue'
+import CountryListComponent from '@/components/ListCountryComponent.vue'
 import { getCountryInEnglish } from '@/utils/CountryUtils'
 
 const { fetchDataList, fetchDataByCountry, covidData, loading, error } = useCovidApi()
@@ -34,9 +36,6 @@ const handleSearch = () => {
   searchCountry.value = ''
 }
 
-const showBtnAll = computed(() => covidData.value.length <= 1)
-const showBtnSearch = computed(() => searchCountry.value.length > 0)
-
 const handleAll = () => {
   covidData.value = []
   searchCountry.value = ''
@@ -62,25 +61,7 @@ const handleAll = () => {
       </div>
 
       <div class="search-box__wrap">
-        <div class="box search-box">
-          <h2 class="title is-4">Filtrar dados sobre um país</h2>
-          <div class="control">
-            <input
-              class="input"
-              type="text"
-              placeholder="Digite o nome do país"
-              v-model="searchCountry"
-              @keyup.enter="handleSearch"
-            />
-            <span class="icon is-left">
-              <i class="icon-search" />
-            </span>
-            <span class="btn-all">
-              <button v-if="showBtnAll && !showBtnSearch" @click="handleAll">Todos</button>
-              <button v-if="showBtnSearch" @click="handleSearch">Buscar</button>
-            </span>
-          </div>
-        </div>
+        <SearchComponent v-model="searchCountry" @search="handleSearch" @all="handleAll" />
       </div>
 
       <div v-if="sortedCovidData.length > 1" class="filters">
@@ -100,25 +81,7 @@ const handleAll = () => {
 
       <div v-if="error" class="error">{{ error }}</div>
 
-      <ul v-if="sortedCovidData.length > 0" class="country-list">
-        <li v-for="(report, index) in sortedCovidData" :key="index" class="box country-card">
-          <h3>{{ report.region.name }}</h3>
-          <div class="stats-data">
-            <div>
-              <p class="total">Total de casos</p>
-              <p class="value">{{ report.confirmed.toLocaleString('pt-BR') }}</p>
-            </div>
-            <div>
-              <p class="total">Mortes</p>
-              <p class="value">{{ report.deaths.toLocaleString() }}</p>
-            </div>
-            <div>
-              <p class="total">Fatalidade</p>
-              <p class="value">{{ (report.fatality_rate * 100).toFixed(2) }}%</p>
-            </div>
-          </div>
-        </li>
-      </ul>
+      <CountryListComponent :covidData="covidData" :sortOrder="sortOrder" />
     </div>
   </section>
 </template>
@@ -172,74 +135,6 @@ const handleAll = () => {
   }
 
   .search-box__wrap {
-    .search-box {
-      border-radius: 3px;
-      position: relative;
-      max-width: 645px;
-      z-index: 10;
-      margin: auto;
-      padding: 40px;
-      margin-top: -100px;
-      @media screen and (max-width: 970px) {
-        margin-top: -50px;
-      }
-      @media screen and (max-width: 900px) {
-        margin-top: -10px;
-      }
-      @media screen and (max-width: 886px) {
-        margin-top: 20px;
-      }
-
-      .title {
-        text-align: center;
-        font-weight: 700;
-        font-style: italic;
-        font-family: $font-family-spectral;
-        font-size: 1.6rem;
-        margin-bottom: 30px;
-      }
-
-      .control {
-        position: relative;
-
-        input[type='text'] {
-          width: 100%;
-          border-bottom: 1px solid $color-border;
-          padding: 5px 5px 5px 30px;
-          &::placeholder {
-            color: $color-text-placeholder;
-          }
-        }
-
-        .icon {
-          .icon-search {
-            display: block;
-            width: 17px;
-            height: 16px;
-            background: url('@/assets/images/icon-search.png') no-repeat;
-          }
-          &.is-left {
-            position: absolute;
-            bottom: 10px;
-            left: 0;
-            color: $color-text-placeholder;
-          }
-        }
-
-        .btn-all {
-          position: absolute;
-          right: 10px;
-          bottom: 10px;
-          button {
-            background: none;
-            border: none;
-            color: $color-text-highlight;
-            font-size: 0.8rem;
-            cursor: pointer;
-          }
-        }
-      }
-    }
   }
 
   .filters {
@@ -274,62 +169,6 @@ const handleAll = () => {
     text-align: center;
     margin-top: 40px;
     color: $color-text-highlight;
-  }
-
-  .country-list {
-    max-width: 645px;
-    margin: auto;
-
-    .country-card {
-      margin-top: 20px;
-      padding: 20px;
-      border-radius: 3px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      h3 {
-        font-size: 1.6rem;
-        font-weight: 700;
-        font-style: italic;
-        font-family: $font-family-spectral;
-        margin-bottom: 30px;
-        margin-top: 20px;
-        text-align: center;
-      }
-
-      .stats-data {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 20px;
-        @media (max-width: 440px) {
-          grid-template-columns: 1fr;
-        }
-
-        div {
-          text-align: center;
-          border-left: 1px solid #e7e7e7;
-          @media (max-width: 440px) {
-            border-left: none;
-          }
-          &:first-child {
-            border-left: none;
-          }
-          p.total {
-            font-size: 1rem;
-            font-weight: 400;
-            font-family: $font-family-spectral;
-            color: $color-text;
-            margin-bottom: 10px;
-          }
-
-          p.value {
-            font-size: 1.2rem;
-            font-weight: 700;
-            font-style: italic;
-            font-family: $font-family-spectral;
-            color: $color-text-highlight;
-          }
-        }
-      }
-    }
   }
 }
 </style>

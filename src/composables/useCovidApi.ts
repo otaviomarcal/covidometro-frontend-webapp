@@ -1,19 +1,7 @@
 import { ref } from 'vue';
 import { countrySearchTranslate, invertTranslationList } from '@/utils/CountryUtils';
+import type { CovidReport } from '@/types/CovidReport';
 
-interface CovidReport {
-  date: string;
-  confirmed: number;
-  deaths: number;
-  recovered: number;
-  active: number;
-  fatality_rate: number;
-  region: {
-    iso: string;
-    name: string;
-    province: string;
-  };
-}
 
 export function useCovidApi() {
   const covidData = ref<CovidReport[]>([]);
