@@ -34,7 +34,7 @@ const handleSearch = () => {
   searchCountry.value = ''
 }
 
-const showBtnAll = computed(() => covidData.value.length <= 1)
+const showBtnAll = computed(() => covidData.value.length < 2)
 const showBtnSearch = computed(() => searchCountry.value.length > 0)
 
 const handleAll = () => {
