@@ -1,4 +1,25 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { ref, onMounted } from 'vue'
+import { useCovidApi } from '@/composables/useCovidApi'
+import LoadingComponent from '@/components/LoadingComponent.vue'
+
+const { fetchDataList, fetchDataByCountry, covidData, loading, error } = useCovidApi()
+
+const searchCountry = ref('')
+
+onMounted(() => {
+  fetchDataList(['ZAF', 'AUS', 'BRA', 'USA', 'CHN'])
+})
+
+const handleSearch = () => {
+  covidData.value = []
+  if (searchCountry.value) {
+    fetchDataByCountry(searchCountry.value)
+  } else {
+    fetchDataList(['ZAF', 'AUS', 'BRA', 'USA', 'CHN'])
+  }
+}
+</script>
 
 <template>
   <section class="section section-hero">
@@ -20,7 +41,14 @@
         <div class="box search-box">
           <h2 class="title is-4">Filtrar dados sobre um país</h2>
           <div class="control">
-            <input class="input" type="text" placeholder="Digite o nome do país" />
+            <input
+              class="input"
+              type="text"
+              placeholder="Digite o nome do país"
+              v-model="searchCountry"
+              @keyup.enter="handleSearch"
+              @blur="handleSearch"
+            />
             <span class="icon is-left">
               <i class="icon-search" />
             </span>
@@ -28,21 +56,27 @@
         </div>
       </div>
 
-      <ul class="country-list">
-        <li class="box country-card">
-          <h3>África</h3>
+      <div class="loading" v-if="loading">
+        <p>Carregando</p>
+        <loading-component color="#EF6160" />
+      </div>
+      <div v-if="error" class="error">{{ error }}</div>
+
+      <ul v-if="covidData.length > 0" class="country-list">
+        <li v-for="(report, index) in covidData" :key="index" class="box country-card">
+          <h3>{{ report.region.name }}</h3>
           <div class="stats-data">
             <div>
               <p class="total">Total de casos</p>
-              <p class="value">64.123</p>
+              <p class="value">{{ report.confirmed.toLocaleString('pt-BR') }}</p>
             </div>
             <div>
               <p class="total">Mortes</p>
-              <p class="value">64.123</p>
+              <p class="value">{{ report.deaths.toLocaleString() }}</p>
             </div>
             <div>
               <p class="total">Fatalidade</p>
-              <p class="value">64.123</p>
+              <p class="value">{{ report.fatality_rate }}%</p>
             </div>
           </div>
         </li>
@@ -151,6 +185,14 @@
           }
         }
       }
+    }
+  }
+
+  .loading {
+    text-align: center;
+    margin-top: 40px;
+    p {
+      margin: 20px;
     }
   }
 
