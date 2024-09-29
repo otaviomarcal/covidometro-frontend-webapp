@@ -8,7 +8,7 @@
           type="text"
           placeholder="Digite o nome do país"
           :value="modelValue"
-          @input="$emit('update:modelValue', $event.target?.value)"
+          @input="handleInput"
           @keyup.enter="onSearch"
         />
         <span class="icon is-left">
@@ -38,6 +38,10 @@ const onSearch = () => {
 
 const onAll = () => {
   emit('all')
+}
+
+const handleInput = (event: Event) => {
+  emit('update:modelValue', (event.target as HTMLInputElement).value)
 }
 
 const showBtnAll = computed(() => !props.modelValue || props.modelValue.length === 0)

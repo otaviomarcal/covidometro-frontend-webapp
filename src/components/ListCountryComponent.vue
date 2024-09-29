@@ -44,7 +44,7 @@ const sortedCovidData = computed(() => {
 
 <style lang="scss" scoped>
 .country-list {
-  max-width: 645px;
+  max-width: 625px;
   margin: auto;
 
   .country-card {

@@ -138,7 +138,7 @@ const handleAll = () => {
   }
 
   .filters {
-    max-width: 645px;
+    max-width: 625px;
     margin: auto;
     margin-top: 20px;
     text-align: right;
