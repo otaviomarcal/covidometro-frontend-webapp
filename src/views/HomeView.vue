@@ -7,14 +7,56 @@ const { fetchDataList, fetchDataByCountry, covidData, loading, error } = useCovi
 
 const searchCountry = ref('')
 
+const countrySearchTranslate: Record<string, string> = {
+  'África do Sul': 'South Africa',
+  'África do norte': 'North Africa',
+  Austrália: 'Australia',
+  Brasil: 'Brazil',
+  'Estados Unidos': 'US',
+  China: 'China',
+  Índia: 'India',
+  Japão: 'Japan',
+  'Nova Zelândia': 'New Zealand',
+  Alemanha: 'Germany',
+  Itália: 'Italy',
+  França: 'France',
+  Espanha: 'Spain',
+  'Reino Unido': 'United Kingdom',
+  Canadá: 'Canada',
+  Groenlândia: 'Greenland',
+  Rússia: 'Russia',
+  'Coreia do Sul': 'South Korea',
+  'Coreia do Norte': 'North Korea',
+  'Arábia Saudita': 'Saudi Arabia',
+  'Emirados Árabes Unidos': 'United Arab Emirates'
+}
+
+const normalizeText = (text: string): string => {
+  return text
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+}
+
+const getCountryInEnglish = (input: string): string => {
+  const normalizedInput = normalizeText(input)
+  const country = Object.keys(countrySearchTranslate).find(
+    (country) => normalizeText(country) === normalizedInput
+  )
+  return country ? countrySearchTranslate[country] : input
+}
+
 onMounted(() => {
   fetchDataList(['ZAF', 'AUS', 'BRA', 'USA', 'CHN'])
 })
 
 const handleSearch = () => {
   covidData.value = []
+
   if (searchCountry.value) {
-    fetchDataByCountry(searchCountry.value)
+    const countryToSearch = getCountryInEnglish(searchCountry.value)
+
+    fetchDataByCountry(countryToSearch)
   } else {
     fetchDataList(['ZAF', 'AUS', 'BRA', 'USA', 'CHN'])
   }
@@ -37,6 +79,7 @@ const handleSearch = () => {
           <img src="@/assets/images/doctors.png" alt="Imagem de médicos" />
         </div>
       </div>
+
       <div class="search-box__wrap">
         <div class="box search-box">
           <h2 class="title is-4">Filtrar dados sobre um país</h2>
@@ -60,6 +103,7 @@ const handleSearch = () => {
         <p>Carregando</p>
         <loading-component color="#EF6160" />
       </div>
+
       <div v-if="error" class="error">{{ error }}</div>
 
       <ul v-if="covidData.length > 0" class="country-list">
