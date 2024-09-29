@@ -28,7 +28,7 @@ onMounted(() => {
 const handleSearch = () => {
   covidData.value = []
   if (searchCountry.value) {
-    const countryToSearch = getCountryInEnglish(searchCountry.value)
+    const countryToSearch = getCountryInEnglish(searchCountry.value.trim())
     fetchDataByCountry(countryToSearch)
   } else {
     fetchDataList(['ZAF', 'AUS', 'BRA', 'USA', 'CHN'])
@@ -114,7 +114,7 @@ const handleAll = () => {
         @media (max-width: 768px) {
           font-size: 4rem;
         }
-        @media (max-width: 376px) {
+        @media (max-width: 476px) {
           font-size: 2.5rem;
         }
       }
@@ -123,6 +123,9 @@ const handleAll = () => {
         font-weight: 400;
         font-family: $font-family-ubuntu;
         color: $color-text;
+        @media (max-width: 476px) {
+          font-size: 0.8rem;
+        }
       }
     }
 

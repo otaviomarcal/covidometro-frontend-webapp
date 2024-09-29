@@ -74,6 +74,9 @@ const showBtnSearch = computed(() => props.modelValue && props.modelValue.length
     font-family: $font-family-spectral;
     font-size: 1.6rem;
     margin-bottom: 30px;
+    @media screen and (max-width: 460px) {
+      font-size: 1.3rem;
+    }
   }
 
   .control {
