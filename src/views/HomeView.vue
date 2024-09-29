@@ -31,6 +31,16 @@ const handleSearch = () => {
   } else {
     fetchDataList(['ZAF', 'AUS', 'BRA', 'USA', 'CHN'])
   }
+  searchCountry.value = ''
+}
+
+const showBtnAll = computed(() => covidData.value.length <= 1)
+const showBtnSearch = computed(() => searchCountry.value.length > 0)
+
+const handleAll = () => {
+  covidData.value = []
+  searchCountry.value = ''
+  fetchDataList(['ZAF', 'AUS', 'BRA', 'USA', 'CHN'])
 }
 </script>
 
@@ -64,6 +74,10 @@ const handleSearch = () => {
             />
             <span class="icon is-left">
               <i class="icon-search" />
+            </span>
+            <span class="btn-all">
+              <button v-if="showBtnAll && !showBtnSearch" @click="handleAll">Todos</button>
+              <button v-if="showBtnSearch" @click="handleSearch">Buscar</button>
             </span>
           </div>
         </div>
@@ -211,6 +225,19 @@ const handleSearch = () => {
             color: $color-text-placeholder;
           }
         }
+
+        .btn-all {
+          position: absolute;
+          right: 10px;
+          bottom: 10px;
+          button {
+            background: none;
+            border: none;
+            color: $color-text-highlight;
+            font-size: 0.8rem;
+            cursor: pointer;
+          }
+        }
       }
     }
   }
@@ -241,6 +268,12 @@ const handleSearch = () => {
     p {
       margin: 20px;
     }
+  }
+
+  .error {
+    text-align: center;
+    margin-top: 40px;
+    color: $color-text-highlight;
   }
 
   .country-list {
