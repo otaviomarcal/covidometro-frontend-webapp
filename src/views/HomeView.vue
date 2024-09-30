@@ -123,11 +123,7 @@ const handleAll = () => {
         font-weight: 400;
         font-family: $font-family-ubuntu;
         color: $color-text;
-<<<<<<< HEAD
-        @media screen and (max-width: 460px) {
-=======
         @media (max-width: 476px) {
->>>>>>> ListSearchComponents
           font-size: 0.8rem;
         }
       }
@@ -142,80 +138,6 @@ const handleAll = () => {
   }
 
   .search-box__wrap {
-<<<<<<< HEAD
-    .search-box {
-      border-radius: 3px;
-      position: relative;
-      max-width: 625px;
-      z-index: 10;
-      margin: auto;
-      padding: 40px;
-      margin-top: -100px;
-      @media screen and (max-width: 970px) {
-        margin-top: -50px;
-      }
-      @media screen and (max-width: 900px) {
-        margin-top: -10px;
-      }
-      @media screen and (max-width: 886px) {
-        margin-top: 20px;
-      }
-
-      .title {
-        text-align: center;
-        font-weight: 700;
-        font-style: italic;
-        font-family: $font-family-spectral;
-        font-size: 1.6rem;
-        margin-bottom: 30px;
-        @media screen and (max-width: 460px) {
-          font-size: 1.3rem;
-        }
-      }
-
-      .control {
-        position: relative;
-
-        input[type='text'] {
-          width: 100%;
-          border-bottom: 1px solid $color-border;
-          padding: 5px 5px 5px 30px;
-          &::placeholder {
-            color: $color-text-placeholder;
-          }
-        }
-
-        .icon {
-          .icon-search {
-            display: block;
-            width: 17px;
-            height: 16px;
-            background: url('@/assets/images/icon-search.png') no-repeat;
-          }
-          &.is-left {
-            position: absolute;
-            bottom: 10px;
-            left: 0;
-            color: $color-text-placeholder;
-          }
-        }
-
-        .btn-all {
-          position: absolute;
-          right: 10px;
-          bottom: 10px;
-          button {
-            background: none;
-            border: none;
-            color: $color-text-highlight;
-            font-size: 0.8rem;
-            cursor: pointer;
-          }
-        }
-      }
-    }
-=======
->>>>>>> ListSearchComponents
   }
 
   .filters {
@@ -251,64 +173,5 @@ const handleAll = () => {
     margin-top: 40px;
     color: $color-text-highlight;
   }
-<<<<<<< HEAD
-
-  .country-list {
-    max-width: 625px;
-    margin: auto;
-
-    .country-card {
-      margin-top: 20px;
-      padding: 20px;
-      border-radius: 3px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      h3 {
-        font-size: 1.6rem;
-        font-weight: 700;
-        font-style: italic;
-        font-family: $font-family-spectral;
-        margin-bottom: 30px;
-        margin-top: 20px;
-        text-align: center;
-      }
-
-      .stats-data {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 20px;
-        @media (max-width: 440px) {
-          grid-template-columns: 1fr;
-        }
-
-        div {
-          text-align: center;
-          border-left: 1px solid #e7e7e7;
-          @media (max-width: 440px) {
-            border-left: none;
-          }
-          &:first-child {
-            border-left: none;
-          }
-          p.total {
-            font-size: 1rem;
-            font-weight: 400;
-            font-family: $font-family-spectral;
-            color: $color-text;
-            margin-bottom: 10px;
-          }
-
-          p.value {
-            font-size: 1.2rem;
-            font-weight: 700;
-            font-style: italic;
-            font-family: $font-family-spectral;
-            color: $color-text-highlight;
-          }
-        }
-      }
-    }
-  }
-=======
->>>>>>> ListSearchComponents
 }
 </style>
