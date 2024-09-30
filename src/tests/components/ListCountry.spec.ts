@@ -24,20 +24,17 @@ const mockData = [
 ];
 
 describe('Testa Listagem ListCountryComponent.vue', () => {
+  const wrapper = mount(ListCountryComponent, {
+    props: { covidData: mockData, sortOrder: 'alphabetical' }
+  });
+
   it('Deve exibir a lista de países.', () => {
-    const wrapper = mount(ListCountryComponent, {
-      props: { covidData: mockData, sortOrder: 'alphabetical' }
-    });
     const countryNames = wrapper.findAll('h3');
     expect(countryNames[0].text()).toBe('Brasil');
     expect(countryNames[1].text()).toBe('China');
   });
 
   it('Deve ordenar a lista em ordem alfabetica', () => {
-    const wrapper = mount(ListCountryComponent, {
-      props: { covidData: mockData, sortOrder: 'alphabetical' }
-    });
-
     const countryNames = wrapper.findAll('h3');
     expect(countryNames[0].text()).toBe('Brasil');
     expect(countryNames[1].text()).toBe('China');
