@@ -39,7 +39,9 @@ export const invertTranslationList: Record<string, string> = Object.fromEntries(
 export const getCountryInEnglish = (input: string): string => {
   const normalizedInput = normalizeText(input);
   const country = Object.keys(invertTranslationList).find(
-    country => normalizeText(country) === normalizedInput
+    (country) => normalizeText(country) === normalizedInput
   );
   return country ? invertTranslationList[country] : input;
 };
+
+
