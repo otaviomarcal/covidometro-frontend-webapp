@@ -19,6 +19,7 @@ export default defineConfig({
       scss: {
         additionalData: '@import "@/assets/scss/variables.scss";',
         quietDeps: true,
+        api: 'modern'
       }
     }
   },
