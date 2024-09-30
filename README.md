@@ -41,6 +41,13 @@ Esta configurado no **_package.json_** para rodar na porta 3000
 yarn dev
 ```
 
+### Teste (Vitest)
+
+```bash
+yarn test
+```
+
+
 ### Compilar para Produção
 
 ```bash
