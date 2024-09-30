@@ -2,6 +2,8 @@
 import { ref, onMounted, computed } from 'vue'
 import { useCovidApi } from '@/composables/useCovidApi'
 import LoadingComponent from '@/components/LoadingComponent.vue'
+import SearchComponent from '@/components/SearchComponent.vue'
+import CountryListComponent from '@/components/ListCountryComponent.vue'
 import { getCountryInEnglish } from '@/utils/CountryUtils'
 
 const { fetchDataList, fetchDataByCountry, covidData, loading, error } = useCovidApi()
@@ -34,9 +36,12 @@ const handleSearch = () => {
   searchCountry.value = ''
 }
 
+<<<<<<< HEAD
 const showBtnAll = computed(() => covidData.value.length < 2)
 const showBtnSearch = computed(() => searchCountry.value.length > 0)
 
+=======
+>>>>>>> ListSearchComponents
 const handleAll = () => {
   covidData.value = []
   searchCountry.value = ''
@@ -62,25 +67,7 @@ const handleAll = () => {
       </div>
 
       <div class="search-box__wrap">
-        <div class="box search-box">
-          <h2 class="title is-4">Filtrar dados sobre um país</h2>
-          <div class="control">
-            <input
-              class="input"
-              type="text"
-              placeholder="Digite o nome do país"
-              v-model="searchCountry"
-              @keyup.enter="handleSearch"
-            />
-            <span class="icon is-left">
-              <i class="icon-search" />
-            </span>
-            <span class="btn-all">
-              <button v-if="showBtnAll && !showBtnSearch" @click="handleAll">Todos</button>
-              <button v-if="showBtnSearch" @click="handleSearch">Buscar</button>
-            </span>
-          </div>
-        </div>
+        <SearchComponent v-model="searchCountry" @search="handleSearch" @all="handleAll" />
       </div>
 
       <div v-if="sortedCovidData.length > 1" class="filters">
@@ -100,25 +87,7 @@ const handleAll = () => {
 
       <div v-if="error" class="error">{{ error }}</div>
 
-      <ul v-if="sortedCovidData.length > 0" class="country-list">
-        <li v-for="(report, index) in sortedCovidData" :key="index" class="box country-card">
-          <h3>{{ report.region.name }}</h3>
-          <div class="stats-data">
-            <div>
-              <p class="total">Total de casos</p>
-              <p class="value">{{ report.confirmed.toLocaleString('pt-BR') }}</p>
-            </div>
-            <div>
-              <p class="total">Mortes</p>
-              <p class="value">{{ report.deaths.toLocaleString() }}</p>
-            </div>
-            <div>
-              <p class="total">Fatalidade</p>
-              <p class="value">{{ (report.fatality_rate * 100).toFixed(2) }}%</p>
-            </div>
-          </div>
-        </li>
-      </ul>
+      <CountryListComponent :covidData="covidData" :sortOrder="sortOrder" />
     </div>
   </section>
 </template>
@@ -151,7 +120,7 @@ const handleAll = () => {
         @media (max-width: 768px) {
           font-size: 4rem;
         }
-        @media (max-width: 376px) {
+        @media (max-width: 476px) {
           font-size: 2.5rem;
         }
       }
@@ -160,7 +129,11 @@ const handleAll = () => {
         font-weight: 400;
         font-family: $font-family-ubuntu;
         color: $color-text;
+<<<<<<< HEAD
         @media screen and (max-width: 460px) {
+=======
+        @media (max-width: 476px) {
+>>>>>>> ListSearchComponents
           font-size: 0.8rem;
         }
       }
@@ -175,6 +148,7 @@ const handleAll = () => {
   }
 
   .search-box__wrap {
+<<<<<<< HEAD
     .search-box {
       border-radius: 3px;
       position: relative;
@@ -246,6 +220,8 @@ const handleAll = () => {
         }
       }
     }
+=======
+>>>>>>> ListSearchComponents
   }
 
   .filters {
@@ -281,6 +257,7 @@ const handleAll = () => {
     margin-top: 40px;
     color: $color-text-highlight;
   }
+<<<<<<< HEAD
 
   .country-list {
     max-width: 625px;
@@ -337,5 +314,7 @@ const handleAll = () => {
       }
     }
   }
+=======
+>>>>>>> ListSearchComponents
 }
 </style>
