@@ -36,12 +36,6 @@ const handleSearch = () => {
   searchCountry.value = ''
 }
 
-<<<<<<< HEAD
-const showBtnAll = computed(() => covidData.value.length < 2)
-const showBtnSearch = computed(() => searchCountry.value.length > 0)
-
-=======
->>>>>>> ListSearchComponents
 const handleAll = () => {
   covidData.value = []
   searchCountry.value = ''
